@@ -1,0 +1,53 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}{{ 'Add' if mode=='add' else 'Edit' }} Coupon — Admin{% endblock %}
+{% block admin_content %}
+<h1 class="h4 mb-4">{{ 'Add Coupon' if mode=='add' else 'Edit Coupon' }}</h1>
+<div class="rtk-card p-4" style="max-width:560px;">
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      {{ form.code.label(class="form-label small fw-semibold") }}
+      {{ form.code(class="form-control text-uppercase" + (" is-invalid" if form.code.errors else "")) }}
+      {% for e in form.code.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        {{ form.discount_type.label(class="form-label small fw-semibold") }}
+        {{ form.discount_type(class="form-select") }}
+      </div>
+      <div class="col-md-6 mb-3">
+        {{ form.discount_value.label(class="form-label small fw-semibold") }}
+        {{ form.discount_value(class="form-control" + (" is-invalid" if form.discount_value.errors else "")) }}
+        {% for e in form.discount_value.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        {{ form.min_order_value.label(class="form-label small fw-semibold") }}
+        {{ form.min_order_value(class="form-control") }}
+      </div>
+      <div class="col-md-6 mb-3">
+        {{ form.max_discount_amount.label(class="form-label small fw-semibold") }}
+        {{ form.max_discount_amount(class="form-control") }}
+        <div class="form-text">Applies only to percentage coupons.</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        {{ form.usage_limit.label(class="form-label small fw-semibold") }}
+        {{ form.usage_limit(class="form-control") }}
+      </div>
+      <div class="col-md-6 mb-3">
+        {{ form.expiry_date.label(class="form-label small fw-semibold") }}
+        {{ form.expiry_date(class="form-control", type="date") }}
+      </div>
+    </div>
+    <div class="form-check mb-4">
+      {{ form.is_active(class="form-check-input") }}
+      {{ form.is_active.label(class="form-check-label small") }}
+    </div>
+    {{ form.submit(class="btn btn-rtk-primary") }}
+    <a href="{{ url_for('admin.coupons') }}" class="btn btn-link">Cancel</a>
+  </form>
+</div>
+{% endblock %}

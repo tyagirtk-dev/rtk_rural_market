@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Order Confirmed — RTK Rural Market{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="rtk-card p-4 p-md-5 text-center">
+        <i class="bi bi-check-circle-fill" style="font-size:3.5rem; color:var(--rtk-green-600);"></i>
+        <h1 class="h4 mt-3 mb-1">Order Placed Successfully!</h1>
+        <p class="text-muted">Order Number: <span class="text-mono fw-semibold">{{ order.order_number }}</span></p>
+
+        {% if order.payment_method == 'upi' %}
+        <div class="rtk-card p-3 d-inline-block my-3" style="background:var(--rtk-green-100);">
+          <i class="bi bi-qr-code" style="font-size:5rem; color:var(--rtk-green-700);"></i>
+          <p class="small mb-2 mt-2">
+          Payment submitted for verification.
+          </p>
+
+          <p class="small">
+          <strong>UTR:</strong>
+          {{ order.utr_number }}
+          </p>
+
+          {% if order.payment_screenshot %}
+          <a
+          target="_blank"
+          href="{{ url_for('static', filename=order.payment_screenshot) }}"
+          class="btn btn-sm btn-outline-success">
+
+          View Uploaded Screenshot
+
+          </a>
+          {% endif %}
+        </div>
+        {% else %}
+        <p class="mt-3"><span class="badge bg-secondary">Cash on Delivery</span></p>
+        {% endif %}
+
+        <p class="mt-3 mb-4" style="color:var(--rtk-ink-soft);">We'll notify you as your order is confirmed, packed and out for delivery. Thanks for supporting the village!</p>
+
+        <div class="d-flex gap-2 justify-content-center">
+          <a href="{{ url_for('orders.detail', order_number=order.order_number) }}" class="btn btn-rtk-primary">View Order</a>
+          <a href="{{ url_for('products.listing') }}" class="btn btn-rtk-outline">Continue Shopping</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

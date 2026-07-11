@@ -1,0 +1,32 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}Cities — Admin{% endblock %}
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h4 mb-0">Delivery Cities</h1>
+  <a href="{{ url_for('admin.add_city') }}" class="btn btn-sm btn-rtk-primary"><i class="bi bi-plus-lg"></i> Add City</a>
+</div>
+<div class="rtk-card">
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead><tr><th>City</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {% for city in cities %}
+        <tr>
+          <td>{{ city.name }}</td>
+          <td>{% if city.is_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}</td>
+          <td class="d-flex gap-2">
+            <a href="{{ url_for('admin.edit_city', city_id=city.id) }}" class="btn btn-sm btn-rtk-outline">Edit</a>
+            <form method="post" action="{{ url_for('admin.delete_city', city_id=city.id) }}" onsubmit="return confirm('Remove this city?');">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3" class="text-center text-muted py-4">No cities added yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{
+  "name": "RTK Rural Market",
+  "short_name": "RTK Market",
+  "description": "Pre-book fresh village products: milk, ghee, paneer, honey, vegetables and more.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f6f1",
+  "theme_color": "#1f4d2d",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/static/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/static/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

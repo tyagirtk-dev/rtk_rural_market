@@ -1,0 +1,248 @@
+/* ==========================================================================
+   RTK Rural Market — Design tokens
+   Palette: deep leaf green (primary), turmeric gold (accent), clay red (warn),
+   soft "malai" paper background (not the generic warm-cream default — cooler,
+   closer to milk than parchment).
+   Type: Fraunces (display, farm-signage warmth) + Inter (body/UI) + JetBrains
+   Mono for prices/order numbers (ledger feel).
+   ========================================================================== */
+
+:root {
+  --rtk-green-900: #14301f;
+  --rtk-green-700: #1f4d2d;
+  --rtk-green-600: #2a6b3c;
+  --rtk-green-100: #e4efe4;
+
+  --rtk-gold-600: #c9911a;
+  --rtk-gold-500: #dba528;
+  --rtk-gold-100: #fbeecb;
+
+  --rtk-clay-600: #b0492f;
+  --rtk-clay-100: #f7e2da;
+
+  --rtk-paper: #f7f6f1;
+  --rtk-paper-raised: #ffffff;
+  --rtk-ink: #22261f;
+  --rtk-ink-soft: #5a6155;
+  --rtk-line: #e1ddd0;
+
+  --rtk-radius-lg: 18px;
+  --rtk-radius-md: 12px;
+  --rtk-radius-sm: 8px;
+  --rtk-shadow: 0 2px 14px rgba(20, 48, 31, 0.08);
+  --rtk-shadow-raised: 0 8px 28px rgba(20, 48, 31, 0.14);
+
+  --bs-body-font-family: 'Inter', system-ui, sans-serif;
+  --bs-primary: var(--rtk-green-700);
+}
+
+[data-theme="dark"] {
+  --rtk-paper: #12160f;
+  --rtk-paper-raised: #1b2117;
+  --rtk-ink: #ecece3;
+  --rtk-ink-soft: #a8ad9f;
+  --rtk-line: #2b3226;
+  --rtk-green-100: #1c2b1e;
+  --rtk-gold-100: #2c2415;
+  --rtk-clay-100: #2c1c17;
+}
+
+* { -webkit-tap-highlight-color: transparent; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--rtk-paper);
+  color: var(--rtk-ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  padding-bottom: 76px; /* room for bottom nav on mobile */
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+h1, h2, h3, h4, .display-font {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--rtk-ink);
+}
+
+.text-mono, .order-number, .price {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+a { color: var(--rtk-green-700); text-decoration: none; }
+[data-theme="dark"] a { color: var(--rtk-gold-500); }
+
+/* ---------- Sticky header ---------- */
+.rtk-header {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  background: var(--rtk-paper-raised);
+  border-bottom: 1px solid var(--rtk-line);
+  box-shadow: var(--rtk-shadow);
+}
+.rtk-brand {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--rtk-green-700);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+[data-theme="dark"] .rtk-brand { color: var(--rtk-gold-500); }
+.rtk-brand .leaf-mark {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--rtk-green-700);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--rtk-gold-100); font-size: 1rem;
+}
+
+/* ---------- Bottom navigation (mobile) ---------- */
+.rtk-bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 1030;
+  background: var(--rtk-paper-raised);
+  border-top: 1px solid var(--rtk-line);
+  display: flex;
+  justify-content: space-around;
+  padding: 6px 0 max(6px, env(safe-area-inset-bottom));
+}
+@media (min-width: 992px) { .rtk-bottom-nav { display: none; } }
+.rtk-bottom-nav a {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 2px; font-size: 0.7rem; color: var(--rtk-ink-soft);
+  padding: 4px 10px; border-radius: var(--rtk-radius-sm);
+  position: relative;
+}
+.rtk-bottom-nav a.active { color: var(--rtk-green-700); font-weight: 600; }
+[data-theme="dark"] .rtk-bottom-nav a.active { color: var(--rtk-gold-500); }
+.rtk-bottom-nav i { font-size: 1.25rem; }
+.rtk-badge-dot {
+  position: absolute; top: 0; right: 6px;
+  background: var(--rtk-clay-600); color: #fff;
+  font-size: 0.6rem; min-width: 16px; height: 16px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  padding: 0 3px;
+}
+
+/* ---------- Cards ---------- */
+.rtk-card {
+  background: var(--rtk-paper-raised);
+  border: 1px solid var(--rtk-line);
+  border-radius: var(--rtk-radius-lg);
+  box-shadow: var(--rtk-shadow);
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.rtk-card:hover { box-shadow: var(--rtk-shadow-raised); }
+
+.rtk-product-card img {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  width: 100%;
+  background: var(--rtk-green-100);
+}
+.rtk-product-card .cat-tag {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--rtk-gold-600);
+  font-weight: 700;
+}
+
+/* ---------- Buttons ---------- */
+.btn-rtk-primary {
+  background: var(--rtk-green-700);
+  color: #fff;
+  border-radius: 999px;
+  border: none;
+  padding: 0.6rem 1.4rem;
+  font-weight: 600;
+}
+.btn-rtk-primary:hover { background: var(--rtk-green-900); color: #fff; }
+.btn-rtk-outline {
+  border: 1.5px solid var(--rtk-green-700);
+  color: var(--rtk-green-700);
+  border-radius: 999px;
+  background: transparent;
+  padding: 0.55rem 1.3rem;
+  font-weight: 600;
+}
+[data-theme="dark"] .btn-rtk-outline { color: var(--rtk-gold-500); border-color: var(--rtk-gold-500); }
+.btn-rtk-gold {
+  background: var(--rtk-gold-500);
+  color: var(--rtk-green-900);
+  border-radius: 999px; border: none;
+  padding: 0.6rem 1.4rem; font-weight: 700;
+}
+
+/* ---------- Category chips ---------- */
+.rtk-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--rtk-green-100);
+  color: var(--rtk-green-700);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+[data-theme="dark"] .rtk-chip { color: var(--rtk-gold-500); }
+.rtk-chip.active { background: var(--rtk-green-700); color: #fff; }
+
+/* ---------- Status badges ---------- */
+.status-badge { border-radius: 999px; padding: 4px 12px; font-size: 0.75rem; font-weight: 700; text-transform: capitalize; }
+.status-pending { background: var(--rtk-gold-100); color: var(--rtk-gold-600); }
+.status-confirmed, .status-packed { background: var(--rtk-green-100); color: var(--rtk-green-700); }
+.status-out_for_delivery { background: #e0eefc; color: #1a5faa; }
+.status-delivered { background: var(--rtk-green-100); color: var(--rtk-green-700); }
+.status-cancelled { background: var(--rtk-clay-100); color: var(--rtk-clay-600); }
+
+/* ---------- Hero ---------- */
+.rtk-hero {
+  background: linear-gradient(135deg, var(--rtk-green-700), var(--rtk-green-900));
+  color: #fdfbf3;
+  border-radius: 0 0 28px 28px;
+  padding: 2.5rem 1.25rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+.rtk-hero h1 { color: #fdfbf3; }
+.rtk-hero .subtitle { color: rgba(253,251,243,0.85); }
+
+/* ---------- Forms ---------- */
+.rtk-form-card {
+  background: var(--rtk-paper-raised);
+  border: 1px solid var(--rtk-line);
+  border-radius: var(--rtk-radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--rtk-shadow);
+}
+.form-control, .form-select {
+  border-radius: var(--rtk-radius-sm);
+  border: 1.5px solid var(--rtk-line);
+  padding: 0.65rem 0.9rem;
+  background: var(--rtk-paper-raised);
+  color: var(--rtk-ink);
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--rtk-green-600);
+  box-shadow: 0 0 0 0.2rem rgba(42,107,60,0.15);
+}
+
+/* ---------- Misc ---------- */
+.rtk-section-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.rtk-empty-state { text-align: center; padding: 3rem 1rem; color: var(--rtk-ink-soft); }
+.table { color: var(--rtk-ink); }
+.rtk-admin-sidebar { background: var(--rtk-paper-raised); border-right: 1px solid var(--rtk-line); min-height: calc(100vh - 60px); }
+.rtk-admin-sidebar a { display: block; padding: 10px 16px; color: var(--rtk-ink-soft); border-radius: var(--rtk-radius-sm); }
+.rtk-admin-sidebar a.active, .rtk-admin-sidebar a:hover { background: var(--rtk-green-100); color: var(--rtk-green-700); }
+
+::selection { background: var(--rtk-gold-500); color: var(--rtk-green-900); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

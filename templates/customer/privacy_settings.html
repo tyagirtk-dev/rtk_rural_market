@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Privacy Settings — RTK Rural Market{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row g-4">
+    <div class="col-lg-3">{% include "customer/_sidebar.html" %}</div>
+    <div class="col-lg-9">
+      <div class="rtk-card p-4" style="max-width:520px;">
+        <h2 class="h4 mb-4">Privacy Settings</h2>
+        <form method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <div class="form-check form-switch mb-4">
+            <input class="form-check-input" type="checkbox" name="marketing_opt_in" id="marketing_opt_in" {{ 'checked' if current_user.marketing_opt_in }}>
+            <label class="form-check-label" for="marketing_opt_in">Receive offers and product updates by email</label>
+          </div>
+          <p class="text-muted small">We never share your personal data with third parties for advertising. Read our <a href="{{ url_for('legal.privacy_policy') }}">Privacy Policy</a> for details.</p>
+          <button class="btn btn-rtk-primary" type="submit">Save Settings</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

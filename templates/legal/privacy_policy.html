@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy — RTK Rural Market{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-9">
+      <div class="rtk-card p-4 p-md-5">
+        <h1 class="h4 mb-4">Privacy Policy</h1>
+        <p class="text-muted small">Last updated: {{ now().strftime('%d %B %Y') }}</p>
+
+        <h2 class="h6 mt-4">1. Information We Collect</h2>
+        <p class="small">We collect your full name, mobile number, email address, delivery address and order history when you register and place orders with RTK Rural Market. Your mobile number is used to verify your identity via OTP and to log you in; your email is used only for order and account notifications.</p>
+
+        <h2 class="h6 mt-4">2. How We Use Your Information</h2>
+        <p class="small">We use your information to process orders, communicate delivery updates, provide customer support, and improve our services. We do not sell your personal data to third parties.</p>
+
+        <h2 class="h6 mt-4">3. Data Storage &amp; Security</h2>
+        <p class="small">Passwords are stored using industry-standard hashing and are never stored in plain text. We apply reasonable technical and organizational measures to protect your data, including CSRF protection, secure session cookies, and rate-limited login attempts.</p>
+
+        <h2 class="h6 mt-4">4. Cookies</h2>
+        <p class="small">We use essential cookies to keep you logged in and remember your theme preference. You can accept or reject non-essential cookies via the cookie banner shown on your first visit.</p>
+
+        <h2 class="h6 mt-4">5. Your Rights</h2>
+        <p class="small">You may edit your profile, manage your saved addresses, opt out of marketing emails, or request deletion of your account at any time from your Account Settings.</p>
+
+        <h2 class="h6 mt-4">6. Contact Us</h2>
+        <p class="small">For any privacy-related questions, please reach out via our <a href="{{ url_for('contact.contact') }}">Contact page</a>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

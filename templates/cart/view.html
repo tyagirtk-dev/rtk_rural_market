@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Your Cart — RTK Rural Market{% endblock %}
+{% block content %}
+<div class="container">
+  <h1 class="h4 mb-4">Your Cart</h1>
+
+  {% if cart.items %}
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="rtk-card">
+        {% for item in cart.items %}
+        <div class="d-flex gap-3 p-3 {{ '' if loop.last else 'border-bottom' }}">
+          {% if item.product.primary_image() %}
+          <img src="{{ url_for('static', filename=item.product.primary_image()) }}" style="width:72px;height:72px;object-fit:cover;border-radius:12px;" alt="{{ item.product.name }}">
+          {% else %}
+          <div style="width:72px;height:72px;border-radius:12px;background:var(--rtk-green-100); display:flex;align-items:center;justify-content:center;">
+            <i class="bi bi-basket3" style="color:var(--rtk-green-600);"></i>
+          </div>
+          {% endif %}
+          <div class="flex-grow-1">
+            <a href="{{ url_for('products.detail', slug=item.product.slug) }}" class="fw-semibold" style="color:var(--rtk-ink);">{{ item.product.name }}</a>
+            <div class="small text-muted">₹{{ '%.2f'|format(item.product.price) }} / {{ item.product.unit }}</div>
+            <form method="post" action="{{ url_for('cart.update_item', item_id=item.id) }}" class="d-flex align-items-center gap-2 mt-2">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <div class="input-group input-group-sm" style="width:110px;">
+                <button class="btn btn-outline-secondary" type="button" data-qty-step="-1" data-target="#qty-{{ item.id }}">−</button>
+                <input type="number" id="qty-{{ item.id }}" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.available_quantity }}" class="form-control text-center">
+                <button class="btn btn-outline-secondary" type="button" data-qty-step="1" data-target="#qty-{{ item.id }}">+</button>
+              </div>
+              <button type="submit" class="btn btn-sm btn-rtk-outline">Update</button>
+            </form>
+          </div>
+          <div class="text-end">
+            <div class="fw-semibold price">₹{{ '%.2f'|format(item.line_total()) }}</div>
+            <form method="post" action="{{ url_for('cart.remove_item', item_id=item.id) }}" class="mt-2">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-sm text-danger p-0"><i class="bi bi-trash"></i> Remove</button>
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="rtk-card p-4">
+        <h2 class="h6 mb-3">Order Summary</h2>
+
+        {% if cart.coupon %}
+        <div class="d-flex justify-content-between align-items-center mb-2 small">
+          <span><i class="bi bi-tag-fill" style="color:var(--rtk-gold-600);"></i> {{ cart.coupon.code }}</span>
+          <form method="post" action="{{ url_for('cart.remove_coupon') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn btn-sm text-danger p-0">Remove</button>
+          </form>
+        </div>
+        {% else %}
+        <form method="post" action="{{ url_for('cart.apply_coupon') }}" class="d-flex gap-2 mb-3">
+          {{ coupon_form.hidden_tag() }}
+          {{ coupon_form.code(class="form-control form-control-sm", placeholder="Coupon code") }}
+          <button class="btn btn-sm btn-rtk-outline">Apply</button>
+        </form>
+        {% endif %}
+
+        <div class="d-flex justify-content-between small mb-2"><span>Subtotal</span><span>₹{{ '%.2f'|format(subtotal) }}</span></div>
+        {% if discount > 0 %}
+        <div class="d-flex justify-content-between small mb-2 text-success"><span>Discount</span><span>−₹{{ '%.2f'|format(discount) }}</span></div>
+        {% endif %}
+        <div class="d-flex justify-content-between small mb-2"><span>Delivery Charge</span><span>{{ '₹%.2f'|format(delivery_charge) if delivery_charge > 0 else 'FREE' }}</span></div>
+        <hr>
+        <div class="d-flex justify-content-between fw-bold h6"><span>Grand Total</span><span>₹{{ '%.2f'|format(grand_total) }}</span></div>
+
+        <a href="{{ url_for('checkout.checkout') }}" class="btn btn-rtk-primary w-100 mt-3">Proceed to Checkout</a>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="rtk-empty-state rtk-card">
+    <i class="bi bi-cart-x fs-1 mb-3 d-block"></i>
+    <p>Your cart is empty.</p>
+    <a href="{{ url_for('products.listing') }}" class="btn btn-rtk-primary btn-sm">Start Shopping</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

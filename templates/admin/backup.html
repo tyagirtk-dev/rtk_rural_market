@@ -1,0 +1,31 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}Backup — Admin{% endblock %}
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h4 mb-0">Database Backup</h1>
+  <form method="post" action="{{ url_for('admin.create_backup') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button class="btn btn-sm btn-rtk-primary"><i class="bi bi-cloud-arrow-up"></i> Create Backup Now</button>
+  </form>
+</div>
+
+<div class="rtk-card">
+  {% if files %}
+  <table class="table align-middle mb-0">
+    <thead><tr><th>Backup File</th><th></th></tr></thead>
+    <tbody>
+      {% for f in files %}
+      <tr>
+        <td class="text-mono small">{{ f }}</td>
+        <td><a href="{{ url_for('admin.download_backup', filename=f) }}" class="btn btn-sm btn-rtk-outline"><i class="bi bi-download"></i> Download</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="rtk-empty-state">
+    <p class="mb-0">No backups created yet.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

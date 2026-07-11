@@ -1,0 +1,48 @@
+{% extends "auth/_auth_base.html" %}
+{% block title %}Create Account — RTK Rural Market{% endblock %}
+{% block auth_content %}
+<h2 class="h3 mb-1">Create your account</h2>
+<p class="text-muted small mb-4">Join RTK Rural Market to pre-book fresh village products.</p>
+
+<form method="post" novalidate>
+  {{ form.hidden_tag() }}
+
+  <div class="mb-3">
+    {{ form.full_name.label(class="form-label small fw-semibold") }}
+    {{ form.full_name(class="form-control" + (" is-invalid" if form.full_name.errors else "")) }}
+    {% for e in form.full_name.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+  </div>
+
+  <div class="mb-3">
+    {{ form.mobile_number.label(class="form-label small fw-semibold") }}
+    <div class="input-group">
+      <span class="input-group-text">+91</span>
+      {{ form.mobile_number(class="form-control" + (" is-invalid" if form.mobile_number.errors else ""), placeholder="98765 43210") }}
+      {% for e in form.mobile_number.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+    </div>
+  </div>
+
+  <div class="mb-3">
+    {{ form.email.label(class="form-label small fw-semibold") }}
+    {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else ""), placeholder="you@example.com") }}
+    {% for e in form.email.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+    <div class="form-text">We'll send order updates here. Your login stays mobile + password.</div>
+  </div>
+
+  <div class="mb-3">
+    {{ form.password.label(class="form-label small fw-semibold") }}
+    {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else ""), placeholder="At least 8 characters") }}
+    {% for e in form.password.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+  </div>
+
+  <div class="mb-4">
+    {{ form.confirm_password.label(class="form-label small fw-semibold") }}
+    {{ form.confirm_password(class="form-control" + (" is-invalid" if form.confirm_password.errors else "")) }}
+    {% for e in form.confirm_password.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+  </div>
+
+  {{ form.submit(class="btn btn-rtk-primary w-100") }}
+</form>
+
+<p class="text-center small mt-4 mb-0">Already have an account? <a href="{{ url_for('auth.login') }}">Log in</a></p>
+{% endblock %}

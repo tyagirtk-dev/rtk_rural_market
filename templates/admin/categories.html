@@ -1,0 +1,37 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}Categories — Admin{% endblock %}
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h4 mb-0">Categories</h1>
+  <a href="{{ url_for('admin.add_category') }}" class="btn btn-sm btn-rtk-primary"><i class="bi bi-plus-lg"></i> Add Category</a>
+</div>
+
+<div class="rtk-card">
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead><tr><th>Icon</th><th>Name</th><th>Slug</th><th>Products</th><th>Sort</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {% for cat in categories %}
+        <tr>
+          <td><i class="bi {{ cat.icon }} fs-5"></i></td>
+          <td>{{ cat.name }}</td>
+          <td class="text-mono small">{{ cat.slug }}</td>
+          <td>{{ cat.products.count() }}</td>
+          <td>{{ cat.sort_order }}</td>
+          <td>{% if cat.is_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}</td>
+          <td class="d-flex gap-2">
+            <a href="{{ url_for('admin.edit_category', category_id=cat.id) }}" class="btn btn-sm btn-rtk-outline">Edit</a>
+            <form method="post" action="{{ url_for('admin.delete_category', category_id=cat.id) }}" onsubmit="return confirm('Delete this category?');">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-muted py-4">No categories yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

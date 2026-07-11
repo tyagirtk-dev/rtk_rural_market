@@ -1,0 +1,50 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}{{ user.full_name }} — Admin{% endblock %}
+{% block admin_content %}
+<a href="{{ url_for('admin.users') }}" class="small d-inline-block mb-3"><i class="bi bi-arrow-left"></i> Back to Users</a>
+
+<div class="row g-4">
+  <div class="col-lg-4">
+    <div class="rtk-card p-4">
+      <h2 class="h5 mb-1">{{ user.full_name }}</h2>
+      <p class="text-muted small mb-3">Customer since {{ user.created_at.strftime('%d %b %Y') }}</p>
+      <p class="small mb-1"><i class="bi bi-telephone"></i> {{ user.mobile_number }}</p>
+      <p class="small mb-1"><i class="bi bi-envelope"></i> {{ user.email or '—' }}</p>
+      <p class="small mb-3"><i class="bi bi-check-circle"></i> Mobile verified: {{ 'Yes' if user.mobile_verified else 'No' }}</p>
+      <form method="post" action="{{ url_for('admin.toggle_user_active', user_id=user.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {% if user.is_active_account %}
+        <button class="btn btn-sm btn-outline-danger w-100">Deactivate Account</button>
+        {% else %}
+        <button class="btn btn-sm btn-rtk-primary w-100">Activate Account</button>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    <div class="rtk-card p-4">
+      <h3 class="h6 mb-3">Order History</h3>
+      {% if orders %}
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead><tr><th>Order #</th><th>Status</th><th>Total</th><th>Date</th><th></th></tr></thead>
+          <tbody>
+            {% for order in orders %}
+            <tr>
+              <td class="text-mono">{{ order.order_number }}</td>
+              <td><span class="status-badge status-{{ order.status }}">{{ order.status.replace('_',' ') }}</span></td>
+              <td>₹{{ '%.2f'|format(order.grand_total) }}</td>
+              <td>{{ order.created_at.strftime('%d %b %Y') }}</td>
+              <td><a href="{{ url_for('admin.order_detail', order_number=order.order_number) }}" class="small">View</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="text-muted small mb-0">No orders placed yet.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

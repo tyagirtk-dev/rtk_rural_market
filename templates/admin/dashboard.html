@@ -1,0 +1,84 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}Admin Dashboard — RTK Rural Market{% endblock %}
+{% block admin_content %}
+<h1 class="h4 mb-4">Dashboard</h1>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3">
+    <div class="rtk-card p-3">
+      <div class="small text-muted">Total Orders</div>
+      <div class="h4 mb-0">{{ stats.total_orders }}</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="rtk-card p-3">
+      <div class="small text-muted">Pending Orders</div>
+      <div class="h4 mb-0">{{ stats.pending_orders }}</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="rtk-card p-3">
+      <div class="small text-muted">Orders This Month</div>
+      <div class="h4 mb-0">{{ stats.orders_this_month }}</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="rtk-card p-3">
+      <div class="small text-muted">Revenue This Month</div>
+      <div class="h4 mb-0">₹{{ '%.2f'|format(stats.revenue_this_month) }}</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="rtk-card p-3">
+      <div class="small text-muted">Total Customers</div>
+      <div class="h4 mb-0">{{ stats.total_customers }}</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="rtk-card p-3">
+      <div class="small text-muted">Active Products</div>
+      <div class="h4 mb-0">{{ stats.total_products }}</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="rtk-card p-3">
+      <div class="small text-muted">Low Stock (≤5)</div>
+      <div class="h4 mb-0 text-danger">{{ stats.low_stock }}</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="rtk-card p-3">
+      <div class="small text-muted">Unresolved Messages</div>
+      <div class="h4 mb-0">{{ stats.unresolved_messages }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="rtk-card p-4">
+  <div class="rtk-section-title">
+    <h2 class="h6 mb-0">Recent Orders</h2>
+    <a href="{{ url_for('admin.orders') }}" class="small">View all</a>
+  </div>
+  {% if recent_orders %}
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead><tr><th>Order #</th><th>Customer</th><th>City</th><th>Status</th><th>Total</th><th>Date</th></tr></thead>
+      <tbody>
+        {% for order in recent_orders %}
+        <tr>
+          <td class="text-mono"><a href="{{ url_for('admin.order_detail', order_number=order.order_number) }}">{{ order.order_number }}</a></td>
+          <td>{{ order.customer.full_name }}</td>
+          <td>{{ order.city }}</td>
+          <td><span class="status-badge status-{{ order.status }}">{{ order.status.replace('_',' ') }}</span></td>
+          <td>₹{{ '%.2f'|format(order.grand_total) }}</td>
+          <td>{{ order.created_at.strftime('%d %b %Y') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-muted small mb-0">No orders yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

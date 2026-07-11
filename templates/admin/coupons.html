@@ -1,0 +1,38 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}Coupons — Admin{% endblock %}
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h4 mb-0">Coupons</h1>
+  <a href="{{ url_for('admin.add_coupon') }}" class="btn btn-sm btn-rtk-primary"><i class="bi bi-plus-lg"></i> Add Coupon</a>
+</div>
+
+<div class="rtk-card">
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead><tr><th>Code</th><th>Type</th><th>Value</th><th>Min Order</th><th>Used</th><th>Expiry</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {% for c in coupons %}
+        <tr>
+          <td class="text-mono fw-semibold">{{ c.code }}</td>
+          <td class="text-capitalize">{{ c.discount_type }}</td>
+          <td>{{ ('%.0f%%'|format(c.discount_value)) if c.discount_type=='percentage' else '₹%.2f'|format(c.discount_value) }}</td>
+          <td>₹{{ '%.2f'|format(c.min_order_value) }}</td>
+          <td>{{ c.times_used }}{{ '/' + c.usage_limit|string if c.usage_limit }}</td>
+          <td>{{ c.expiry_date.strftime('%d %b %Y') if c.expiry_date else 'No expiry' }}</td>
+          <td>{% if c.is_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}</td>
+          <td class="d-flex gap-2">
+            <a href="{{ url_for('admin.edit_coupon', coupon_id=c.id) }}" class="btn btn-sm btn-rtk-outline">Edit</a>
+            <form method="post" action="{{ url_for('admin.delete_coupon', coupon_id=c.id) }}" onsubmit="return confirm('Delete this coupon?');">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="text-center text-muted py-4">No coupons yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

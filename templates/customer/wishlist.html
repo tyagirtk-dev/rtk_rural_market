@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% from "partials/product_card.html" import product_card %}
+{% block title %}Wishlist — RTK Rural Market{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row g-4">
+    <div class="col-lg-3">{% include "customer/_sidebar.html" %}</div>
+    <div class="col-lg-9">
+      <h2 class="h4 mb-4">My Wishlist</h2>
+      {% if items %}
+      <div class="row g-3">
+        {% for product in items %}{{ product_card(product) }}{% endfor %}
+      </div>
+      {% else %}
+      <div class="rtk-empty-state rtk-card">
+        <i class="bi bi-heart fs-1 mb-3 d-block"></i>
+        <p>Your wishlist is empty.</p>
+        <a href="{{ url_for('products.listing') }}" class="btn btn-rtk-primary btn-sm">Browse Products</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

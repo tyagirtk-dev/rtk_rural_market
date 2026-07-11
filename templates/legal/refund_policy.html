@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Refund Policy — RTK Rural Market{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-9">
+      <div class="rtk-card p-4 p-md-5">
+        <h1 class="h4 mb-4">Refund Policy</h1>
+        <p class="text-muted small">Last updated: {{ now().strftime('%d %B %Y') }}</p>
+
+        <h2 class="h6 mt-4">1. Eligibility for Refunds</h2>
+        <p class="small">Refunds are provided if an order is cancelled by RTK Rural Market due to stock unavailability, or if a product delivered is damaged, spoiled, or significantly different from what was ordered. Please report issues within 24 hours of delivery.</p>
+
+        <h2 class="h6 mt-4">2. Perishable Goods</h2>
+        <p class="small">As most of our products (milk, curd, paneer, vegetables) are perishable, we are unable to accept returns once delivered unless the item was defective, spoiled on arrival, or incorrect.</p>
+
+        <h2 class="h6 mt-4">3. Refund Process</h2>
+        <p class="small">Approved refunds for UPI payments are credited back to the original payment method within 5-7 business days. For Cash on Delivery orders that are cancelled before dispatch, no charge is made.</p>
+
+        <h2 class="h6 mt-4">4. Coupon Adjustments</h2>
+        <p class="small">If a coupon was applied to a partially refunded order, the discount amount will be recalculated proportionally.</p>
+
+        <h2 class="h6 mt-4">5. Contact for Refunds</h2>
+        <p class="small">To request a refund, please reach out via our <a href="{{ url_for('contact.contact') }}">Contact page</a> with your order number and details of the issue.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

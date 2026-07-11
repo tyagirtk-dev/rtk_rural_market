@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Terms &amp; Conditions — RTK Rural Market{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-9">
+      <div class="rtk-card p-4 p-md-5">
+        <h1 class="h4 mb-4">Terms &amp; Conditions</h1>
+        <p class="text-muted small">Last updated: {{ now().strftime('%d %B %Y') }}</p>
+
+        <h2 class="h6 mt-4">1. Nature of Service</h2>
+        <p class="small">RTK Rural Market is a pre-booking platform. Orders placed on this website are confirmed and delivered once enough orders accumulate for a delivery run to your city. Delivery dates are indicative and may shift depending on order volume and availability of fresh stock.</p>
+
+        <h2 class="h6 mt-4">2. Account Registration</h2>
+        <p class="small">You must provide accurate registration details and verify your mobile number via OTP. You are responsible for keeping your password confidential and for all activity under your account.</p>
+
+        <h2 class="h6 mt-4">3. Orders &amp; Pricing</h2>
+        <p class="small">Prices, stock and availability are subject to change without prior notice. We reserve the right to cancel any order due to stock unavailability, pricing errors, or delivery constraints, in which case a refund or credit will be arranged.</p>
+
+        <h2 class="h6 mt-4">4. Payments</h2>
+        <p class="small">We accept UPI and Cash on Delivery. For UPI orders, please complete payment using the QR code shown after checkout; unpaid orders may be cancelled.</p>
+
+        <h2 class="h6 mt-4">5. Limitation of Liability</h2>
+        <p class="small">RTK Rural Market is not liable for delays caused by weather, transport disruption, or events beyond our reasonable control.</p>
+
+        <h2 class="h6 mt-4">6. Changes to These Terms</h2>
+        <p class="small">We may update these terms from time to time. Continued use of the platform after changes constitutes acceptance of the revised terms.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

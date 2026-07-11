@@ -1,0 +1,103 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}Payments — Admin{% endblock %}
+{% block admin_content %}
+<h1 class="h4 mb-4">Payments</h1>
+<div class="rtk-card">
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead><tr><th>Order #</th><th>Customer</th><th>Method</th><th>Payment Status</th><th>Amount</th><th>UTR</th><th>Screenshot</th><th>Date</th><th></th></tr></thead>
+      <tbody>
+        {% for order in pagination.items %}
+        <tr>
+          <td class="text-mono">{{ order.order_number }}</td>
+          <td>{{ order.customer.full_name }}</td>
+          <td class="text-capitalize">{{ order.payment_method }}</td>
+          <td>
+            {% if order.payment_status == 'paid' %}<span class="badge bg-success">Paid</span>
+            {% elif order.payment_status == 'failed' %}<span class="badge bg-danger">Failed</span>
+            {% else %}<span class="badge bg-warning text-dark">Pending</span>{% endif %}
+          </td>
+          
+<td>₹{{ '%.2f'|format(order.grand_total) }}</td>
+
+<td>{{ order.utr_number or '-' }}</td>
+
+<td>
+{% if order.payment_screenshot %}
+<a
+target="_blank"
+href="{{ url_for('static', filename=order.payment_screenshot) }}"
+class="btn btn-sm btn-primary">
+View
+</a>
+{% else %}
+-
+{% endif %}
+</td>
+
+          <td>{{ order.created_at.strftime('%d %b %Y') }}</td>
+          
+
+<td>
+
+<a href="{{ url_for('admin.order_detail',order_number=order.order_number) }}"
+
+class="btn btn-sm btn-secondary">
+
+Order
+
+</a>
+
+{% if order.payment_status=="pending" %}
+
+<form method="post"
+
+action="{{ url_for('admin.payment_approve',order_id=order.id) }}"
+
+style="display:inline">
+
+<button class="btn btn-sm btn-success">
+
+Approve
+
+</button>
+
+</form>
+
+<form method="post"
+
+action="{{ url_for('admin.payment_reject',order_id=order.id) }}"
+
+style="display:inline">
+
+<button class="btn btn-sm btn-danger">
+
+Reject
+
+</button>
+
+</form>
+
+{% endif %}
+
+</td>
+
+
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-muted py-4">No payments recorded yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% if pagination.pages > 1 %}
+<nav class="mt-3">
+  <ul class="pagination">
+    {% for p in range(1, pagination.pages + 1) %}
+    <li class="page-item {{ 'active' if p == pagination.page }}"><a class="page-link" href="{{ url_for('admin.payments', page=p) }}">{{ p }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endif %}
+{% endblock %}

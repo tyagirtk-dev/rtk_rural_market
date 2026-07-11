@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% block title %}Checkout — RTK Rural Market
+
+<script>
+
+function toggleUPI(){
+
+    let upi=document.getElementById("pm_upi");
+
+    let box=document.getElementById("upiBox");
+
+    if(upi.checked){
+
+        box.style.display="block";
+
+    }else{
+
+        box.style.display="none";
+
+    }
+
+}
+
+document.addEventListener("DOMContentLoaded",function(){
+
+    toggleUPI();
+
+    document.getElementById("pm_upi").addEventListener("change",toggleUPI);
+
+    document.getElementById("pm_cod").addEventListener("change",toggleUPI);
+
+});
+
+</script>
+
+
+{% endblock %}
+{% block content %}
+<div class="container">
+  <h1 class="h4 mb-4">Checkout</h1>
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="rtk-card p-4 mb-3">
+          <h2 class="h6 mb-3">Delivery Details</h2>
+          <div class="mb-3">
+            {{ form.full_address.label(class="form-label small fw-semibold") }}
+            {{ form.full_address(class="form-control" + (" is-invalid" if form.full_address.errors else ""), rows="2") }}
+            {% for e in form.full_address.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="row">
+            <div class="col-md-7 mb-3">
+              {{ form.city.label(class="form-label small fw-semibold") }}
+              {{ form.city(class="form-control" + (" is-invalid" if form.city.errors else "")) }}
+              {% for e in form.city.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="col-md-5 mb-3">
+              {{ form.pin_code.label(class="form-label small fw-semibold") }}
+              {{ form.pin_code(class="form-control" + (" is-invalid" if form.pin_code.errors else "")) }}
+              {% for e in form.pin_code.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+            </div>
+          </div>
+          <div class="mb-3">
+            {{ form.contact_mobile.label(class="form-label small fw-semibold") }}
+            {{ form.contact_mobile(class="form-control" + (" is-invalid" if form.contact_mobile.errors else "")) }}
+            {% for e in form.contact_mobile.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="mb-1">
+            {{ form.order_notes.label(class="form-label small fw-semibold") }}
+            {{ form.order_notes(class="form-control", rows="2", placeholder="e.g. Deliver after 5 PM") }}
+          </div>
+        </div>
+
+        <div class="rtk-card p-4">
+          <h2 class="h6 mb-3">Payment Method</h2>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="radio" name="payment_method" id="pm_upi" value="upi" {{ 'checked' if form.payment_method.data != 'cod' }} onchange="document.getElementById('upiBox').classList.remove('d-none')">
+            <label class="form-check-label" for="pm_upi">UPI (Scan QR Code)</label>
+          </div>
+          <div id="upiBox" class="rtk-card p-3 text-center mb-3" style="background:var(--rtk-green-100);">
+
+            <img
+            src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={{ upi_url|urlencode }}"
+            class="img-fluid mb-3"
+            style="max-width:250px;">
+
+            <h5>₹{{ '%.2f'|format(grand_total) }}</h5>
+
+            <p class="small mb-3">
+            Scan using Google Pay / PhonePe / Paytm
+            </p>
+
+            <div class="mb-3 text-start">
+                {{ form.utr_number.label(class="form-label") }}
+                {{ form.utr_number(class="form-control", placeholder="Enter UTR Number") }}
+            </div>
+
+            <div class="mb-2 text-start">
+                {{ form.payment_screenshot.label(class="form-label") }}
+                {{ form.payment_screenshot(class="form-control") }}
+            </div>
+
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="payment_method" id="pm_cod" value="cod" {{ 'checked' if form.payment_method.data == 'cod' }}>
+            <label class="form-check-label" for="pm_cod">Cash on Delivery</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="rtk-card p-4">
+          <h2 class="h6 mb-3">Order Summary</h2>
+          {% for item in cart.items %}
+          <div class="d-flex justify-content-between small mb-2">
+            <span>{{ item.product.name }} × {{ item.quantity }}</span>
+            <span>₹{{ '%.2f'|format(item.line_total()) }}</span>
+          </div>
+          {% endfor %}
+          <hr>
+          <div class="d-flex justify-content-between small mb-2"><span>Subtotal</span><span>₹{{ '%.2f'|format(subtotal) }}</span></div>
+          {% if discount > 0 %}
+          <div class="d-flex justify-content-between small mb-2 text-success"><span>Discount</span><span>−₹{{ '%.2f'|format(discount) }}</span></div>
+          {% endif %}
+          <div class="d-flex justify-content-between small mb-2"><span>Delivery Charge</span><span>{{ '₹%.2f'|format(delivery_charge) if delivery_charge > 0 else 'FREE' }}</span></div>
+          <hr>
+          <div class="d-flex justify-content-between fw-bold h6 mb-3"><span>Grand Total</span><span>₹{{ '%.2f'|format(grand_total) }}</span></div>
+          {{ form.submit(class="btn btn-rtk-primary w-100") }}
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<script>
+
+function toggleUPI(){
+
+    let upi=document.getElementById("pm_upi");
+
+    let box=document.getElementById("upiBox");
+
+    if(upi.checked){
+
+        box.style.display="block";
+
+    }else{
+
+        box.style.display="none";
+
+    }
+
+}
+
+document.addEventListener("DOMContentLoaded",function(){
+
+    toggleUPI();
+
+    document.getElementById("pm_upi").addEventListener("change",toggleUPI);
+
+    document.getElementById("pm_cod").addEventListener("change",toggleUPI);
+
+});
+
+</script>
+
+
+{% endblock %}

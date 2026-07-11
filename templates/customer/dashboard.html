@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}My Dashboard — RTK Rural Market{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row g-4">
+    <div class="col-lg-3">{% include "customer/_sidebar.html" %}</div>
+    <div class="col-lg-9">
+      <div class="rtk-card p-4 mb-4">
+        <h2 class="h4 mb-1">Hi, {{ current_user.full_name.split(' ')[0] }} 👋</h2>
+        <p class="text-muted mb-0 small">{{ current_user.mobile_number }} {% if current_user.email %}· {{ current_user.email }}{% endif %}</p>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+          <div class="rtk-card p-3 text-center">
+            <div class="h4 mb-0">{{ current_user.orders.count() }}</div>
+            <div class="small text-muted">Total Orders</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="rtk-card p-3 text-center">
+            <div class="h4 mb-0">{{ current_user.addresses.count() }}</div>
+            <div class="small text-muted">Saved Addresses</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="rtk-card p-3 text-center">
+            <div class="h4 mb-0">{{ current_user.wishlist_items.count() }}</div>
+            <div class="small text-muted">Wishlist Items</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="rtk-card p-3 text-center">
+            <div class="h4 mb-0">{{ unread_notification_count }}</div>
+            <div class="small text-muted">Unread Alerts</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rtk-card p-4">
+        <div class="rtk-section-title">
+          <h3 class="h5 mb-0">Recent Orders</h3>
+          <a href="{{ url_for('orders.history') }}" class="small">View all</a>
+        </div>
+        {% if recent_orders %}
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead><tr><th>Order #</th><th>Date</th><th>Status</th><th>Total</th><th></th></tr></thead>
+            <tbody>
+              {% for order in recent_orders %}
+              <tr>
+                <td class="text-mono">{{ order.order_number }}</td>
+                <td>{{ order.created_at.strftime('%d %b %Y') }}</td>
+                <td><span class="status-badge status-{{ order.status }}">{{ order.status.replace('_',' ') }}</span></td>
+                <td>₹{{ '%.2f'|format(order.grand_total) }}</td>
+                <td><a href="{{ url_for('orders.detail', order_number=order.order_number) }}" class="small">View</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted small mb-0">You haven't placed any orders yet.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}Delivery Planning — Admin{% endblock %}
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+  <h1 class="h4 mb-0">Delivery Planning</h1>
+  <a href="{{ url_for('admin.add_delivery_schedule') }}" class="btn btn-sm btn-rtk-primary"><i class="bi bi-plus-lg"></i> Schedule Delivery Date</a>
+</div>
+
+<form method="get" class="d-flex gap-2 mb-4">
+  <input type="text" name="city" class="form-control form-control-sm" placeholder="Filter by city…" value="{{ city_filter }}" style="max-width:220px;">
+  <button class="btn btn-sm btn-rtk-outline">Filter</button>
+</form>
+
+{% if grouped %}
+<div class="row g-3 mb-4">
+  {% for city, orders_in_city in grouped.items() %}
+  <div class="col-md-6 col-lg-4">
+    <div class="rtk-card p-3">
+      <div class="d-flex justify-content-between align-items-start mb-2">
+        <h2 class="h6 mb-0">{{ city }}</h2>
+        <a href="{{ url_for('admin.delivery_print', city=city) }}" target="_blank" class="small"><i class="bi bi-printer"></i> Print List</a>
+      </div>
+      <p class="small text-muted mb-2">{{ summary[city].order_count }} orders · ₹{{ '%.2f'|format(summary[city].total_value) }} total value</p>
+      <ul class="list-unstyled small mb-0" style="max-height:180px; overflow-y:auto;">
+        {% for order in orders_in_city %}
+        <li class="d-flex justify-content-between border-bottom py-1">
+          <a href="{{ url_for('admin.order_detail', order_number=order.order_number) }}" class="text-mono">{{ order.order_number }}</a>
+          <span class="status-badge status-{{ order.status }}" style="font-size:0.65rem;">{{ order.status.replace('_',' ') }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="rtk-empty-state rtk-card mb-4">
+  <p class="mb-0">No confirmed or packed orders awaiting delivery right now.</p>
+</div>
+{% endif %}
+
+<div class="rtk-card p-4">
+  <h2 class="h6 mb-3">Scheduled Delivery Runs</h2>
+  {% if schedules %}
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead><tr><th>City</th><th>Delivery Date</th><th>Notes</th><th>Created</th></tr></thead>
+      <tbody>
+        {% for s in schedules %}
+        <tr>
+          <td>{{ s.city }}</td>
+          <td>{{ s.delivery_date.strftime('%d %b %Y') }}</td>
+          <td>{{ s.notes or '—' }}</td>
+          <td>{{ s.created_at.strftime('%d %b %Y') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-muted small mb-0">No delivery runs scheduled yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Saved Addresses — RTK Rural Market{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row g-4">
+    <div class="col-lg-3">{% include "customer/_sidebar.html" %}</div>
+    <div class="col-lg-9">
+      <div class="rtk-section-title">
+        <h2 class="h4 mb-0">Saved Addresses</h2>
+        <a href="{{ url_for('customer.add_address') }}" class="btn btn-rtk-primary btn-sm"><i class="bi bi-plus-lg"></i> Add Address</a>
+      </div>
+
+      {% if addresses %}
+      <div class="row g-3">
+        {% for addr in addresses %}
+        <div class="col-md-6">
+          <div class="rtk-card p-3 h-100">
+            <div class="d-flex justify-content-between align-items-start">
+              <span class="badge" style="background:var(--rtk-green-100); color:var(--rtk-green-700);">{{ addr.label }}</span>
+              {% if addr.is_default %}<span class="badge bg-warning text-dark">Default</span>{% endif %}
+            </div>
+            <p class="mb-1 mt-2">{{ addr.full_address }}</p>
+            <p class="text-muted small mb-3">{{ addr.city }} - {{ addr.pin_code }}{% if addr.landmark %} · {{ addr.landmark }}{% endif %}</p>
+            <div class="d-flex gap-2">
+              <a href="{{ url_for('customer.edit_address', address_id=addr.id) }}" class="btn btn-sm btn-rtk-outline">Edit</a>
+              <form method="post" action="{{ url_for('customer.delete_address', address_id=addr.id) }}" onsubmit="return confirm('Remove this address?');">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button class="btn btn-sm btn-outline-danger">Delete</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="rtk-empty-state rtk-card">
+        <i class="bi bi-geo-alt fs-1 mb-3 d-block"></i>
+        <p>No saved addresses yet.</p>
+        <a href="{{ url_for('customer.add_address') }}" class="btn btn-rtk-primary btn-sm">Add your first address</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

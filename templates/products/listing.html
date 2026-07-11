@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% from "partials/product_card.html" import product_card %}
+{% block title %}Shop Fresh Products — RTK Rural Market{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3">
+    <h1 class="h4 mb-0">{{ 'Search: ' + search if search else 'All Products' }}</h1>
+    <form method="get" class="d-flex gap-2">
+      <input type="hidden" name="category" value="{{ category_slug or '' }}">
+      <input type="search" name="q" class="form-control form-control-sm" placeholder="Search products…" value="{{ search }}" style="min-width:180px;">
+      <select name="sort" class="form-select form-select-sm" onchange="this.form.submit()" style="width:auto;">
+        <option value="newest" {{ 'selected' if sort=='newest' }}>Newest</option>
+        <option value="price_low" {{ 'selected' if sort=='price_low' }}>Price: Low to High</option>
+        <option value="price_high" {{ 'selected' if sort=='price_high' }}>Price: High to Low</option>
+      </select>
+      <button class="btn btn-sm btn-rtk-primary"><i class="bi bi-search"></i></button>
+    </form>
+  </div>
+
+  <div class="d-flex gap-2 overflow-auto pb-3 mb-3" style="scrollbar-width:none;">
+    <a href="{{ url_for('products.listing', q=search, sort=sort) }}" class="rtk-chip {{ 'active' if not category_slug }}"><i class="bi bi-grid"></i> All</a>
+    {% for cat in categories %}
+      <a href="{{ url_for('products.listing', category=cat.slug, q=search, sort=sort) }}" class="rtk-chip {{ 'active' if category_slug==cat.slug }}"><i class="bi {{ cat.icon }}"></i> {{ cat.name }}</a>
+    {% endfor %}
+  </div>
+
+  {% if products %}
+  <div class="row g-3">
+    {% for product in products %}{{ product_card(product) }}{% endfor %}
+  </div>
+
+  {% if pagination.pages > 1 %}
+  <nav class="mt-4">
+    <ul class="pagination justify-content-center">
+      {% for p in range(1, pagination.pages + 1) %}
+      <li class="page-item {{ 'active' if p == pagination.page }}">
+        <a class="page-link" href="{{ url_for('products.listing', page=p, category=category_slug, q=search, sort=sort) }}">{{ p }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </nav>
+  {% endif %}
+
+  {% else %}
+  <div class="rtk-empty-state rtk-card">
+    <i class="bi bi-emoji-frown fs-1 mb-3 d-block"></i>
+    <p class="mb-0">No products found. Try a different search or category.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

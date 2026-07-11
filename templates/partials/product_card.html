@@ -1,0 +1,33 @@
+{% macro product_card(product) %}
+<div class="col-6 col-md-4 col-lg-3">
+  <div class="rtk-card rtk-product-card h-100 d-flex flex-column">
+    <a href="{{ url_for('products.detail', slug=product.slug) }}">
+      {% if product.primary_image() %}
+        <img src="{{ url_for('static', filename=product.primary_image()) }}" alt="{{ product.name }}">
+      {% else %}
+        <div class="d-flex align-items-center justify-content-center" style="aspect-ratio:1/1; background:var(--rtk-green-100);">
+          <i class="bi bi-basket3 fs-1" style="color:var(--rtk-green-600);"></i>
+        </div>
+      {% endif %}
+    </a>
+    <div class="p-3 d-flex flex-column flex-grow-1">
+      <span class="cat-tag">{{ product.category.name if product.category else '' }}</span>
+      <a href="{{ url_for('products.detail', slug=product.slug) }}" class="fw-semibold mt-1 mb-1" style="color:var(--rtk-ink); line-height:1.3;">
+        {{ product.name }}
+      </a>
+      <div class="mt-auto d-flex align-items-center justify-content-between pt-2">
+        <span class="price fw-bold" style="color:var(--rtk-green-700);">₹{{ '%.2f'|format(product.price) }}<span class="small fw-normal" style="color:var(--rtk-ink-soft);">/{{ product.unit }}</span></span>
+        {% if product.is_purchasable() %}
+          <form method="post" action="{{ url_for('cart.add_to_cart', product_id=product.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="quantity" value="1">
+            <button class="btn btn-sm btn-rtk-primary" title="Add to cart"><i class="bi bi-plus-lg"></i></button>
+          </form>
+        {% else %}
+          <span class="badge bg-secondary">Sold out</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}

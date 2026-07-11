@@ -1,0 +1,31 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}Messages — Admin{% endblock %}
+{% block admin_content %}
+<h1 class="h4 mb-4">Contact Messages</h1>
+<div class="rtk-card">
+  {% for msg in messages %}
+  <div class="p-3 {{ '' if loop.last else 'border-bottom' }}">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+      <div>
+        <div class="fw-semibold small">{{ msg.name }} <span class="text-muted fw-normal">&lt;{{ msg.email }}&gt;</span></div>
+        <div class="small text-muted">{{ msg.mobile or '—' }} · {{ msg.created_at.strftime('%d %b %Y, %I:%M %p') }}</div>
+      </div>
+      {% if msg.is_resolved %}
+      <span class="badge bg-success">Resolved</span>
+      {% else %}
+      <form method="post" action="{{ url_for('admin.resolve_message', message_id=msg.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn btn-sm btn-rtk-outline">Mark Resolved</button>
+      </form>
+      {% endif %}
+    </div>
+    {% if msg.subject %}<p class="fw-semibold small mt-2 mb-1">{{ msg.subject }}</p>{% endif %}
+    <p class="small mb-0">{{ msg.message }}</p>
+  </div>
+  {% else %}
+  <div class="rtk-empty-state">
+    <p class="mb-0">No contact messages yet.</p>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

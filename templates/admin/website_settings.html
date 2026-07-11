@@ -1,0 +1,35 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}Website Settings — Admin{% endblock %}
+{% block admin_content %}
+<h1 class="h4 mb-4">Website Settings</h1>
+<div class="rtk-card p-4" style="max-width:560px;">
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      {{ form.site_name.label(class="form-label small fw-semibold") }}
+      {{ form.site_name(class="form-control") }}
+    </div>
+    <div class="mb-3">
+      {{ form.contact_phone.label(class="form-label small fw-semibold") }}
+      {{ form.contact_phone(class="form-control") }}
+    </div>
+    <div class="mb-3">
+      {{ form.contact_email.label(class="form-label small fw-semibold") }}
+      {{ form.contact_email(class="form-control") }}
+    </div>
+    <div class="mb-3">
+      {{ form.whatsapp_number.label(class="form-label small fw-semibold") }}
+      {{ form.whatsapp_number(class="form-control", placeholder="919000000000") }}
+    </div>
+    <div class="mb-3">
+      {{ form.address.label(class="form-label small fw-semibold") }}
+      {{ form.address(class="form-control", rows="3") }}
+    </div>
+    <div class="mb-4">
+      {{ form.google_maps_embed.label(class="form-label small fw-semibold") }}
+      {{ form.google_maps_embed(class="form-control", rows="2", placeholder="https://www.google.com/maps/embed?...") }}
+    </div>
+    {{ form.submit(class="btn btn-rtk-primary") }}
+  </form>
+</div>
+{% endblock %}

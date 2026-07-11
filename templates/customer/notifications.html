@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Notifications — RTK Rural Market{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row g-4">
+    <div class="col-lg-3">{% include "customer/_sidebar.html" %}</div>
+    <div class="col-lg-9">
+      <h2 class="h4 mb-4">Notifications</h2>
+      {% if notifications %}
+      <div class="rtk-card">
+        {% for n in notifications %}
+        <a href="{{ n.link or '#' }}" class="d-flex gap-3 p-3 {{ '' if loop.last else 'border-bottom' }}" style="text-decoration:none; color:inherit;">
+          <div class="flex-shrink-0">
+            <span class="d-inline-flex align-items-center justify-content-center rounded-circle" style="width:38px;height:38px; background:var(--rtk-green-100); color:var(--rtk-green-700);">
+              {% if n.category == 'order' %}<i class="bi bi-bag-check"></i>
+              {% elif n.category == 'account' %}<i class="bi bi-person"></i>
+              {% elif n.category == 'promo' %}<i class="bi bi-tag"></i>
+              {% else %}<i class="bi bi-bell"></i>{% endif %}
+            </span>
+          </div>
+          <div class="flex-grow-1">
+            <div class="fw-semibold small">{{ n.title }}</div>
+            <div class="text-muted small">{{ n.message }}</div>
+            <div class="text-muted" style="font-size:0.72rem;">{{ n.created_at.strftime('%d %b %Y, %I:%M %p') }}</div>
+          </div>
+          {% if not n.is_read %}<span class="align-self-center" style="width:8px;height:8px;border-radius:50%;background:var(--rtk-clay-600);"></span>{% endif %}
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="rtk-empty-state rtk-card">
+        <i class="bi bi-bell fs-1 mb-3 d-block"></i>
+        <p class="mb-0">You have no notifications yet.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

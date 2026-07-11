@@ -1,0 +1,72 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}Products — Admin{% endblock %}
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+  <h1 class="h4 mb-0">Products</h1>
+  <div class="d-flex gap-2">
+    <form method="get" class="d-flex gap-2">
+      <input type="search" name="q" class="form-control form-control-sm" placeholder="Search products…" value="{{ q }}">
+      <button class="btn btn-sm btn-rtk-outline">Search</button>
+    </form>
+    <a href="{{ url_for('admin.add_product') }}" class="btn btn-sm btn-rtk-primary"><i class="bi bi-plus-lg"></i> Add Product</a>
+  </div>
+</div>
+
+<div class="rtk-card">
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {% for product in pagination.items %}
+        <tr>
+          <td>
+            {% if product.primary_image() %}
+            <img src="{{ url_for('static', filename=product.primary_image()) }}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;">
+            {% else %}
+            <div style="width:44px;height:44px;border-radius:8px;background:var(--rtk-green-100);"></div>
+            {% endif %}
+          </td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.category.name if product.category else '—' }}</td>
+          <td>₹{{ '%.2f'|format(product.price) }}</td>
+          <td>{{ product.available_quantity }} {{ product.unit }}</td>
+          <td>
+            {% if product.is_hidden %}<span class="badge bg-secondary">Hidden</span>
+            {% elif product.status == 'active' %}<span class="badge bg-success">Active</span>
+            {% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}
+            {% if product.is_featured %}<span class="badge bg-warning text-dark">Featured</span>{% endif %}
+          </td>
+          <td class="d-flex gap-1 flex-wrap">
+            <a href="{{ url_for('admin.edit_product', product_id=product.id) }}" class="btn btn-sm btn-rtk-outline">Edit</a>
+            <form method="post" action="{{ url_for('admin.toggle_product_hidden', product_id=product.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-sm btn-outline-secondary">{{ 'Unhide' if product.is_hidden else 'Hide' }}</button>
+            </form>
+            <form method="post" action="{{ url_for('admin.toggle_product_featured', product_id=product.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-sm btn-outline-warning">{{ 'Unfeature' if product.is_featured else 'Feature' }}</button>
+            </form>
+            <form method="post" action="{{ url_for('admin.delete_product', product_id=product.id) }}" onsubmit="return confirm('Delete this product?');">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-muted py-4">No products found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% if pagination.pages > 1 %}
+<nav class="mt-3">
+  <ul class="pagination">
+    {% for p in range(1, pagination.pages + 1) %}
+    <li class="page-item {{ 'active' if p == pagination.page }}"><a class="page-link" href="{{ url_for('admin.products', page=p, q=q) }}">{{ p }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endif %}
+{% endblock %}

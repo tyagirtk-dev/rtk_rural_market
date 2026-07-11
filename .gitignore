@@ -1,0 +1,10 @@
+.env
+venv/
+__pycache__/
+*.pyc
+database/*.db
+logs/*.log
+backups/*.db
+static/uploads/products/*
+!static/uploads/products/.gitkeep
+.DS_Store

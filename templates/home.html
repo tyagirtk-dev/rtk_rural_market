@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% from "partials/product_card.html" import product_card %}
+
+{% block title %}RTK Rural Market — Fresh Village Products, Pre-Booked{% endblock %}
+
+{% block content %}
+<section class="rtk-hero mb-4">
+  <div class="container">
+    <p class="text-uppercase small fw-semibold mb-2" style="letter-spacing:0.1em; color:var(--rtk-gold-500);">Straight from the village</p>
+    <h1 class="display-5 mb-3">Pre-book fresh milk, ghee &amp; more — before the city run.</h1>
+    <p class="subtitle mb-4" style="max-width:520px;">We travel to the city only once enough orders come in. Reserve your favourites now and we'll deliver them fresh, on schedule.</p>
+    <div class="d-flex gap-2 flex-wrap">
+      <a href="{{ url_for('products.listing') }}" class="btn btn-rtk-gold">Browse Products</a>
+      {% if not current_user.is_authenticated %}
+      <a href="{{ url_for('auth.register') }}" class="btn btn-rtk-outline" style="border-color:#fff; color:#fff;">Create Account</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="d-flex gap-2 overflow-auto pb-3 mb-2" style="scrollbar-width:none;">
+    <a href="{{ url_for('products.listing') }}" class="rtk-chip {{ 'active' if not request.args.get('category') }}"><i class="bi bi-grid"></i> All</a>
+    {% for cat in categories %}
+      <a href="{{ url_for('products.listing', category=cat.slug) }}" class="rtk-chip"><i class="bi {{ cat.icon }}"></i> {{ cat.name }}</a>
+    {% endfor %}
+  </div>
+
+  {% if featured %}
+  <div class="rtk-section-title">
+    <h2 class="h4 mb-0">Featured this week</h2>
+    <a href="{{ url_for('products.listing') }}" class="small">See all <i class="bi bi-arrow-right"></i></a>
+  </div>
+  <div class="row g-3 mb-5">
+    {% for product in featured %}{{ product_card(product) }}{% endfor %}
+  </div>
+  {% endif %}
+
+  {% if latest %}
+  <div class="rtk-section-title">
+    <h2 class="h4 mb-0">Newly added</h2>
+  </div>
+  <div class="row g-3 mb-5">
+    {% for product in latest %}{{ product_card(product) }}{% endfor %}
+  </div>
+  {% endif %}
+
+  {% if not featured and not latest %}
+  <div class="rtk-empty-state">
+    <i class="bi bi-basket3 fs-1 mb-3 d-block"></i>
+    <p>No products listed yet. Please check back soon!</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

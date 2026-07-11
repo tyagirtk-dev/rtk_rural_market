@@ -1,0 +1,21 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}{{ 'Add' if mode=='add' else 'Edit' }} City — Admin{% endblock %}
+{% block admin_content %}
+<h1 class="h4 mb-4">{{ 'Add City' if mode=='add' else 'Edit City' }}</h1>
+<div class="rtk-card p-4" style="max-width:480px;">
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      {{ form.name.label(class="form-label small fw-semibold") }}
+      {{ form.name(class="form-control" + (" is-invalid" if form.name.errors else "")) }}
+      {% for e in form.name.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="form-check mb-4">
+      {{ form.is_active(class="form-check-input") }}
+      {{ form.is_active.label(class="form-check-label small") }}
+    </div>
+    {{ form.submit(class="btn btn-rtk-primary") }}
+    <a href="{{ url_for('admin.cities') }}" class="btn btn-link">Cancel</a>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}{{ 'Add' if mode=='add' else 'Edit' }} Category — Admin{% endblock %}
+{% block admin_content %}
+<h1 class="h4 mb-4">{{ 'Add Category' if mode=='add' else 'Edit Category' }}</h1>
+<div class="rtk-card p-4" style="max-width:520px;">
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      {{ form.name.label(class="form-label small fw-semibold") }}
+      {{ form.name(class="form-control" + (" is-invalid" if form.name.errors else "")) }}
+      {% for e in form.name.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="mb-3">
+      {{ form.icon.label(class="form-label small fw-semibold") }}
+      {{ form.icon(class="form-control", placeholder="e.g. bi-cup-straw") }}
+      <div class="form-text">Any <a href="https://icons.getbootstrap.com/" target="_blank" rel="noopener">Bootstrap Icons</a> class name.</div>
+    </div>
+    <div class="mb-3">
+      {{ form.sort_order.label(class="form-label small fw-semibold") }}
+      {{ form.sort_order(class="form-control") }}
+    </div>
+    <div class="form-check mb-4">
+      {{ form.is_active(class="form-check-input") }}
+      {{ form.is_active.label(class="form-check-label small") }}
+    </div>
+    {{ form.submit(class="btn btn-rtk-primary") }}
+    <a href="{{ url_for('admin.categories') }}" class="btn btn-link">Cancel</a>
+  </form>
+</div>
+{% endblock %}

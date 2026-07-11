@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Delivery List — {{ city }}</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 24px; color: #22261f; }
+  h1 { font-size: 20px; margin-bottom: 4px; }
+  p.meta { color: #666; margin-top: 0; font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+  th, td { border: 1px solid #ccc; padding: 8px; font-size: 13px; text-align: left; }
+  th { background: #f0f0f0; }
+  .print-btn { margin-top: 16px; }
+  @media print { .print-btn { display: none; } }
+</style>
+</head>
+<body>
+  <h1>Delivery List — {{ city }}</h1>
+  <p class="meta">Generated on {{ now().strftime('%d %B %Y, %I:%M %p') }} · {{ orders|length }} orders</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Order Number</th>
+        <th>Customer</th>
+        <th>Mobile</th>
+        <th>Address</th>
+        <th>PIN</th>
+        <th>Items</th>
+        <th>Total</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in orders %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ order.order_number }}</td>
+        <td>{{ order.customer.full_name }}</td>
+        <td>{{ order.contact_mobile }}</td>
+        <td>{{ order.full_address }}</td>
+        <td>{{ order.pin_code }}</td>
+        <td>
+          {% for item in order.items %}{{ item.product_name }} × {{ item.quantity }}{{ ', ' if not loop.last }}{% endfor %}
+        </td>
+        <td>₹{{ '%.2f'|format(order.grand_total) }}</td>
+        <td>{{ order.status.replace('_',' ') }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="9">No orders for this city.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <button class="print-btn" onclick="window.print()">Print</button>
+</body>
+</html>

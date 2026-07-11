@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Delete Account — RTK Rural Market{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row g-4">
+    <div class="col-lg-3">{% include "customer/_sidebar.html" %}</div>
+    <div class="col-lg-9">
+      <div class="rtk-card p-4" style="max-width:480px;">
+        <h2 class="h4 mb-2 text-danger">Delete Account</h2>
+        <p class="text-muted small mb-4">This will deactivate your account and remove access permanently. Your past order records are retained for accounting purposes. This action cannot be undone.</p>
+        <form method="post" novalidate>
+          {{ form.hidden_tag() }}
+          <div class="mb-4">
+            {{ form.password.label(class="form-label small fw-semibold") }}
+            {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else "")) }}
+            {% for e in form.password.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+          </div>
+          {{ form.submit(class="btn btn-outline-danger w-100") }}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

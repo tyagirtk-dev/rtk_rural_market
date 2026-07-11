@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Shipping Policy — RTK Rural Market{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-9">
+      <div class="rtk-card p-4 p-md-5">
+        <h1 class="h4 mb-4">Shipping &amp; Delivery Policy</h1>
+        <p class="text-muted small">Last updated: {{ now().strftime('%d %B %Y') }}</p>
+
+        <h2 class="h6 mt-4">1. Pre-Booking Model</h2>
+        <p class="small">RTK Rural Market operates on a pre-booking basis. The business owner travels to the city only once enough confirmed orders accumulate for a delivery city, meaning delivery windows may take a few days depending on demand.</p>
+
+        <h2 class="h6 mt-4">2. Delivery Charges</h2>
+        <p class="small">A standard delivery charge applies per order below a minimum order value. Orders above the free-delivery threshold shown at checkout are delivered free of charge.</p>
+
+        <h2 class="h6 mt-4">3. Delivery Areas</h2>
+        <p class="small">We currently deliver to select cities as listed in each product's "Delivery City" field. If your city is not listed, please contact us to check upcoming delivery runs.</p>
+
+        <h2 class="h6 mt-4">4. Order Tracking</h2>
+        <p class="small">Track your order status — Pending, Confirmed, Packed, Out for Delivery, or Delivered — from your Order History page. You'll also receive email and in-app notifications as the status changes.</p>
+
+        <h2 class="h6 mt-4">5. Missed Deliveries</h2>
+        <p class="small">Please ensure someone is available at the delivery address on the scheduled date, especially for perishable items. Repeated missed deliveries may result in order cancellation without refund for spoiled perishables.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

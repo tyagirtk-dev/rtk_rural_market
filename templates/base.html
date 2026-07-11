@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{% block title %}{{ site_name }} — Fresh Village Products{% endblock %}</title>
+<meta name="description" content="Pre-book fresh village products — milk, ghee, paneer, honey, vegetables and more — direct from a rural startup you can trust.">
+<meta name="theme-color" content="#1f4d2d">
+<link rel="manifest" href="{{ url_for('main.manifest') }}">
+<link rel="icon" href="{{ url_for('static', filename='icons/icon-192.png') }}">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<header class="rtk-header">
+  <div class="container d-flex align-items-center justify-content-between py-2">
+    <a href="{{ url_for('main.home') }}" class="rtk-brand">
+      <span class="leaf-mark"><i class="bi bi-flower2"></i></span>
+      RTK Rural Market
+    </a>
+
+    <form action="{{ url_for('products.listing') }}" method="get" class="d-none d-md-flex mx-3 flex-grow-1" style="max-width:420px;">
+      <input type="search" name="q" class="form-control form-control-sm" placeholder="Search milk, ghee, honey…" value="{{ request.args.get('q','') }}">
+    </form>
+
+    <div class="d-flex align-items-center gap-2">
+      <button class="btn btn-sm btn-rtk-outline d-none d-lg-inline-flex" data-theme-toggle title="Toggle dark mode">
+        <i class="bi bi-moon-stars-fill" data-theme-icon></i>
+      </button>
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('notifications.center') }}" class="position-relative btn btn-sm btn-rtk-outline d-none d-lg-inline-flex">
+          <i class="bi bi-bell"></i>
+          {% if unread_notification_count > 0 %}
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.6rem;">{{ unread_notification_count }}</span>
+          {% endif %}
+        </a>
+        <a href="{{ url_for('cart.view_cart') }}" class="btn btn-sm btn-rtk-outline d-none d-lg-inline-flex"><i class="bi bi-basket3"></i></a>
+        <div class="dropdown d-none d-lg-inline-block">
+          <button class="btn btn-sm btn-rtk-primary dropdown-toggle" data-bs-toggle="dropdown">{{ current_user.full_name.split(' ')[0] }}</button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="{{ url_for('customer.dashboard') }}">Dashboard</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('orders.history') }}">My Orders</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('customer.profile') }}">Edit Profile</a></li>
+            {% if current_user.is_admin %}<li><a class="dropdown-item" href="{{ url_for('admin.dashboard') }}">Admin Panel</a></li>{% endif %}
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}">Logout</a></li>
+          </ul>
+        </div>
+      {% else %}
+        <a href="{{ url_for('auth.login') }}" class="btn btn-sm btn-rtk-outline d-none d-lg-inline-flex">Login</a>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-sm btn-rtk-primary d-none d-lg-inline-flex">Sign Up</a>
+      {% endif %}
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container mt-3">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'danger' if category=='danger' else category }} alert-dismissible fade show rounded-4" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="mt-5 py-5" style="background:var(--rtk-green-900); color:#e4efe4;">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-6 col-md-3">
+        <h6 class="text-white mb-3">RTK Rural Market</h6>
+        <p class="small mb-0" style="color:#b7c6b8;">Fresh village products, pre-booked by you, delivered when the run is full.</p>
+      </div>
+      <div class="col-6 col-md-3">
+        <h6 class="text-white mb-3">Shop</h6>
+        <a href="{{ url_for('products.listing') }}" class="d-block small mb-2" style="color:#b7c6b8;">All Products</a>
+        <a href="{{ url_for('customer.wishlist') if current_user.is_authenticated else url_for('auth.login') }}" class="d-block small mb-2" style="color:#b7c6b8;">Wishlist</a>
+        <a href="{{ url_for('orders.history') if current_user.is_authenticated else url_for('auth.login') }}" class="d-block small mb-2" style="color:#b7c6b8;">Track Orders</a>
+      </div>
+      <div class="col-6 col-md-3">
+        <h6 class="text-white mb-3">Company</h6>
+        <a href="{{ url_for('contact.contact') }}" class="d-block small mb-2" style="color:#b7c6b8;">Contact Us</a>
+        <a href="{{ url_for('legal.privacy_policy') }}" class="d-block small mb-2" style="color:#b7c6b8;">Privacy Policy</a>
+        <a href="{{ url_for('legal.terms') }}" class="d-block small mb-2" style="color:#b7c6b8;">Terms &amp; Conditions</a>
+        <a href="{{ url_for('legal.refund_policy') }}" class="d-block small mb-2" style="color:#b7c6b8;">Refund Policy</a>
+        <a href="{{ url_for('legal.shipping_policy') }}" class="d-block small mb-2" style="color:#b7c6b8;">Shipping Policy</a>
+      </div>
+      <div class="col-6 col-md-3">
+        <h6 class="text-white mb-3">Reach Us</h6>
+        <a href="https://wa.me/919000000000" target="_blank" rel="noopener" class="d-block small mb-2" style="color:#b7c6b8;"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+        <a href="tel:+919000000000" class="d-block small mb-2" style="color:#b7c6b8;"><i class="bi bi-telephone"></i> Call Us</a>
+      </div>
+    </div>
+    <hr style="border-color:#2a3d2c;">
+    <p class="small text-center mb-0" style="color:#8fa190;">&copy; {{ now().year if now is defined else '' }} RTK Rural Market. All rights reserved.</p>
+  </div>
+</footer>
+
+{% if current_user.is_authenticated %}
+<nav class="rtk-bottom-nav">
+  <a href="{{ url_for('main.home') }}" class="{{ 'active' if request.endpoint=='main.home' }}"><i class="bi bi-house-door{{ '-fill' if request.endpoint=='main.home' }}"></i>Home</a>
+  <a href="{{ url_for('products.listing') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('products.') }}"><i class="bi bi-basket3{{ '-fill' if request.endpoint and request.endpoint.startswith('products.') }}"></i>Shop</a>
+  <a href="{{ url_for('cart.view_cart') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('cart.') }}"><i class="bi bi-cart3"></i>Cart</a>
+  <a href="{{ url_for('notifications.center') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('notifications.') }}" style="position:relative;">
+    <i class="bi bi-bell"></i>Alerts
+    <span class="rtk-badge-dot {{ 'd-none' if unread_notification_count == 0 }}" data-notification-badge data-poll-url="{{ url_for('notifications.unread_count') }}">{{ unread_notification_count }}</span>
+  </a>
+  <a href="{{ url_for('customer.dashboard') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('customer.') }}"><i class="bi bi-person-circle"></i>Account</a>
+</nav>
+{% else %}
+<nav class="rtk-bottom-nav">
+  <a href="{{ url_for('main.home') }}" class="{{ 'active' if request.endpoint=='main.home' }}"><i class="bi bi-house-door"></i>Home</a>
+  <a href="{{ url_for('products.listing') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('products.') }}"><i class="bi bi-basket3"></i>Shop</a>
+  <a href="{{ url_for('contact.contact') }}" class="{{ 'active' if request.endpoint=='contact.contact' }}"><i class="bi bi-headset"></i>Contact</a>
+  <a href="{{ url_for('auth.login') }}" class="{{ 'active' if request.endpoint=='auth.login' }}"><i class="bi bi-box-arrow-in-right"></i>Login</a>
+</nav>
+{% endif %}
+
+<div id="rtk-cookie-banner" class="d-none position-fixed bottom-0 start-0 end-0 p-3" style="z-index:1080;">
+  <div class="container">
+    <div class="rtk-card p-3 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-5 mb-lg-0">
+      <p class="mb-0 small">We use cookies to keep you signed in and remember your preferences. <a href="{{ url_for('legal.privacy_policy') }}">Learn more</a>.</p>
+      <div class="d-flex gap-2 flex-shrink-0">
+        <button class="btn btn-sm btn-rtk-outline" data-cookie-reject>Reject</button>
+        <button class="btn btn-sm btn-rtk-primary" data-cookie-accept>Accept</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-2 px-0">
+      <div class="rtk-admin-sidebar p-3">
+        <h6 class="text-uppercase small fw-bold mb-3" style="color:var(--rtk-ink-soft); letter-spacing:0.06em;">Admin Panel</h6>
+        <a href="{{ url_for('admin.dashboard') }}" class="{{ 'active' if request.endpoint=='admin.dashboard' }}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
+        <a href="{{ url_for('admin.users') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('admin.user') }}"><i class="bi bi-people me-2"></i>Users</a>
+        <a href="{{ url_for('admin.products') }}" class="{{ 'active' if request.endpoint and 'product' in request.endpoint }}"><i class="bi bi-box-seam me-2"></i>Products</a>
+        <a href="{{ url_for('admin.categories') }}" class="{{ 'active' if request.endpoint and 'categor' in request.endpoint }}"><i class="bi bi-tags me-2"></i>Categories</a>
+        <a href="{{ url_for('admin.inventory') }}" class="{{ 'active' if request.endpoint=='admin.inventory' }}"><i class="bi bi-clipboard-data me-2"></i>Inventory</a>
+        <a href="{{ url_for('admin.orders') }}" class="{{ 'active' if request.endpoint and 'order' in request.endpoint }}"><i class="bi bi-bag-check me-2"></i>Orders</a>
+        <a href="{{ url_for('admin.payments') }}" class="{{ 'active' if request.endpoint=='admin.payments' }}"><i class="bi bi-credit-card me-2"></i>Payments</a>
+        <a href="{{ url_for('admin.coupons') }}" class="{{ 'active' if request.endpoint and 'coupon' in request.endpoint }}"><i class="bi bi-percent me-2"></i>Coupons</a>
+        <a href="{{ url_for('admin.cities') }}" class="{{ 'active' if request.endpoint and 'cit' in request.endpoint and 'no' not in request.endpoint }}"><i class="bi bi-geo me-2"></i>Cities</a>
+        <a href="{{ url_for('admin.delivery_planning') }}" class="{{ 'active' if request.endpoint and 'delivery' in request.endpoint }}"><i class="bi bi-truck me-2"></i>Delivery Planning</a>
+        <a href="{{ url_for('admin.messages') }}" class="{{ 'active' if request.endpoint=='admin.messages' }}"><i class="bi bi-envelope me-2"></i>Messages</a>
+        <a href="{{ url_for('admin.reports') }}" class="{{ 'active' if request.endpoint=='admin.reports' }}"><i class="bi bi-graph-up me-2"></i>Reports</a>
+        <hr>
+        <a href="{{ url_for('admin.smtp_settings') }}" class="{{ 'active' if request.endpoint=='admin.smtp_settings' }}"><i class="bi bi-envelope-gear me-2"></i>SMTP Settings</a>
+        <a href="{{ url_for('admin.website_settings') }}" class="{{ 'active' if request.endpoint=='admin.website_settings' }}"><i class="bi bi-gear me-2"></i>Website Settings</a>
+        <a href="{{ url_for('admin.backup') }}" class="{{ 'active' if request.endpoint and 'backup' in request.endpoint }}"><i class="bi bi-cloud-arrow-down me-2"></i>Backup</a>
+        <a href="{{ url_for('admin.logs') }}" class="{{ 'active' if request.endpoint=='admin.logs' }}"><i class="bi bi-journal-text me-2"></i>Logs</a>
+        <hr>
+        <a href="{{ url_for('main.home') }}"><i class="bi bi-box-arrow-left me-2"></i>Back to Site</a>
+      </div>
+    </div>
+    <div class="col-lg-10 py-4 px-3 px-lg-4">
+      {% block admin_content %}{% endblock %}
+    </div>
+  </div>
+</div>
+{% endblock %}

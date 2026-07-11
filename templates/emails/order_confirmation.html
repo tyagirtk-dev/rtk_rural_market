@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<body style="margin:0; padding:0; background:#f7f6f1; font-family:Arial, sans-serif; color:#22261f;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f7f6f1; padding:24px 0;">
+    <tr><td align="center">
+      <table width="520" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:16px; overflow:hidden;">
+        <tr><td style="background:#1f4d2d; padding:24px; text-align:center;">
+          <span style="color:#fbeecb; font-size:20px; font-weight:bold;">RTK Rural Market</span>
+        </td></tr>
+        <tr><td style="padding:32px 28px;">
+          <h1 style="font-size:20px; margin:0 0 4px;">Order Confirmed 🎉</h1>
+          <p style="font-size:13px; color:#8fa190; margin:0 0 20px;">Order Number: <strong>{{ order.order_number }}</strong></p>
+
+          <p style="font-size:14px; color:#5a6155;">Hi {{ user.full_name }}, thanks for your order! Here's a summary:</p>
+
+          <table width="100%" cellpadding="8" cellspacing="0" style="font-size:13px; border-collapse:collapse; margin-top:12px;">
+            {% for item in order.items %}
+            <tr style="border-bottom:1px solid #e1ddd0;">
+              <td>{{ item.product_name }} × {{ item.quantity }} {{ item.unit }}</td>
+              <td align="right">₹{{ '%.2f'|format(item.line_total()) }}</td>
+            </tr>
+            {% endfor %}
+            <tr><td style="padding-top:12px;">Subtotal</td><td align="right" style="padding-top:12px;">₹{{ '%.2f'|format(order.subtotal) }}</td></tr>
+            {% if order.discount_amount %}
+            <tr><td>Discount</td><td align="right">−₹{{ '%.2f'|format(order.discount_amount) }}</td></tr>
+            {% endif %}
+            <tr><td>Delivery Charge</td><td align="right">₹{{ '%.2f'|format(order.delivery_charge) }}</td></tr>
+            <tr style="font-weight:bold;"><td>Grand Total</td><td align="right">₹{{ '%.2f'|format(order.grand_total) }}</td></tr>
+          </table>
+
+          <p style="font-size:13px; color:#5a6155; margin-top:24px;">
+            Delivering to: {{ order.full_address }}, {{ order.city }} - {{ order.pin_code }}
+          </p>
+          <p style="font-size:13px; color:#8fa190; margin-top:24px;">— The RTK Rural Market Team</p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>

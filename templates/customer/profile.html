@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile — RTK Rural Market{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row g-4">
+    <div class="col-lg-3">{% include "customer/_sidebar.html" %}</div>
+    <div class="col-lg-9">
+      <div class="rtk-card p-4">
+        <h2 class="h4 mb-4">Edit Profile</h2>
+        <form method="post" novalidate style="max-width:480px;">
+          {{ form.hidden_tag() }}
+          <div class="mb-3">
+            {{ form.full_name.label(class="form-label small fw-semibold") }}
+            {{ form.full_name(class="form-control" + (" is-invalid" if form.full_name.errors else "")) }}
+            {% for e in form.full_name.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="mb-3">
+            {{ form.email.label(class="form-label small fw-semibold") }}
+            {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else "")) }}
+            {% for e in form.email.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="mb-4">
+            <label class="form-label small fw-semibold">Mobile Number</label>
+            <input class="form-control" value="{{ current_user.mobile_number }}" disabled>
+            <div class="form-text">Your mobile number is used for login and can't be changed here.</div>
+          </div>
+          {{ form.submit(class="btn btn-rtk-primary") }}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

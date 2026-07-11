@@ -1,0 +1,26 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}Schedule Delivery — Admin{% endblock %}
+{% block admin_content %}
+<h1 class="h4 mb-4">Schedule Delivery Date</h1>
+<div class="rtk-card p-4" style="max-width:480px;">
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      {{ form.city.label(class="form-label small fw-semibold") }}
+      {{ form.city(class="form-control" + (" is-invalid" if form.city.errors else "")) }}
+      {% for e in form.city.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="mb-3">
+      {{ form.delivery_date.label(class="form-label small fw-semibold") }}
+      {{ form.delivery_date(class="form-control" + (" is-invalid" if form.delivery_date.errors else ""), type="date") }}
+      {% for e in form.delivery_date.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="mb-4">
+      {{ form.notes.label(class="form-label small fw-semibold") }}
+      {{ form.notes(class="form-control") }}
+    </div>
+    {{ form.submit(class="btn btn-rtk-primary") }}
+    <a href="{{ url_for('admin.delivery_planning') }}" class="btn btn-link">Cancel</a>
+  </form>
+</div>
+{% endblock %}

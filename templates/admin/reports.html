@@ -1,0 +1,65 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}Reports — Admin{% endblock %}
+{% block admin_content %}
+<h1 class="h4 mb-4">Reports</h1>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="rtk-card p-4 mb-4">
+      <h2 class="h6 mb-3">Sales — Last {{ days_back }} Days</h2>
+      {% if daily_rows %}
+      <div class="table-responsive">
+        <table class="table table-sm align-middle mb-0">
+          <thead><tr><th>Date</th><th>Orders</th><th>Revenue</th></tr></thead>
+          <tbody>
+            {% for day, count, total in daily_rows %}
+            <tr><td>{{ day }}</td><td>{{ count }}</td><td>₹{{ '%.2f'|format(total) }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="text-muted small mb-0">No sales recorded in this period.</p>
+      {% endif %}
+    </div>
+
+    <div class="rtk-card p-4">
+      <h2 class="h6 mb-3">Order Status Breakdown</h2>
+      {% if status_counts %}
+      {% set total_orders = status_counts | sum(attribute=1) %}
+      {% for status, count in status_counts %}
+      <div class="mb-2">
+        <div class="d-flex justify-content-between small mb-1">
+          <span class="text-capitalize">{{ status.replace('_',' ') }}</span>
+          <span>{{ count }}</span>
+        </div>
+        <div class="progress" style="height:8px;">
+          <div class="progress-bar" style="width:{{ (count / total_orders * 100) if total_orders else 0 }}%; background:var(--rtk-green-700);"></div>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <p class="text-muted small mb-0">No orders yet.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="rtk-card p-4">
+      <h2 class="h6 mb-3">Top Selling Products</h2>
+      {% if top_products %}
+      <table class="table table-sm align-middle mb-0">
+        <thead><tr><th>Product</th><th>Units Sold</th></tr></thead>
+        <tbody>
+          {% for name, qty in top_products %}
+          <tr><td>{{ name }}</td><td>{{ qty }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="text-muted small mb-0">No sales data yet.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
